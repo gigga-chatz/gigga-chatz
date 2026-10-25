@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    function signed(){ return request.auth != null; }
+    function admin(){ return signed() && request.auth.token.email == 'jab@gigga.app'; }
+    match /users/{u} {
+      allow read: if signed();
+      allow create, update: if signed() && (request.auth.uid == u || admin());
+      allow delete: if admin() || (signed() && request.auth.uid == u);
+    }
+    match /updates/{id} {
+      allow read: if signed();
+      allow write: if admin();
+    }
+    match /chats/{c} {
+      allow read, update: if signed() && (request.auth.uid in resource.data.members || admin());
+      allow create: if signed() && request.auth.uid in request.resource.data.members;
+      allow delete: if signed() && (request.auth.uid in resource.data.members || admin());
+      match /messages/{m} {
+        function mem(){ return request.auth.uid in get(/databases/$(db)/documents/chats/$(c)).data.members; }
+        allow read: if signed() && (mem() || admin());
+        allow create: if signed() && mem() && request.resource.data.from == request.auth.uid;
+        allow update: if admin();
+        allow delete: if signed() && (admin() || resource.data.from == request.auth.uid);
+      }
+    }
+  }
+}

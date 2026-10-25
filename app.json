@@ -1,0 +1,37 @@
+{
+ "expo": {
+  "name": "Gigga Chatz",
+  "slug": "gigga-chatz",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "userInterfaceStyle": "light",
+  "plugins": [
+   [
+    "expo-splash-screen",
+    {
+     "image": "./assets/splash-icon.png",
+     "imageWidth": 200,
+     "backgroundColor": "#FFE7D6"
+    }
+   ],
+   [
+    "expo-audio",
+    {
+     "microphonePermission": "Gigga Chatz needs the microphone for voice messages."
+    }
+   ]
+  ],
+  "android": {
+   "package": "com.giggachatz.app",
+   "adaptiveIcon": {
+    "foregroundImage": "./assets/adaptive-icon.png",
+    "backgroundColor": "#FFE7D6"
+   }
+  },
+  "web": {
+   "bundler": "metro",
+   "favicon": "./assets/favicon.png"
+  }
+ }
+}
